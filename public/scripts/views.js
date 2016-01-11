@@ -36,6 +36,9 @@ var ReadingListContainer = React.createClass({
   // TODO: Set pollInterval on this
   componentDidMount: function() {
     this.loadData()
+
+    // Initialize accordion for the list
+    $('.ui.accordion').accordion()
   },
 
   // @override
@@ -45,6 +48,7 @@ var ReadingListContainer = React.createClass({
         // TODO: Figure out why this is stuck under the menu w/out br
         <br/><br/>
         <ReadingList data={this.state.data} />
+        <br/>
         <BookForm onAddBook={this.handleAddBook} />
       </div>
     );
@@ -60,7 +64,7 @@ var ReadingList = React.createClass({
       // TODO: Include the list ID somewhere?
       <div>
         <h1>{readinglist.name}</h1>
-        <div className="ui list">
+        <div className="ui accordion">
           {books.map(function(book){
             return(
               <Book title={book.title}
@@ -127,14 +131,15 @@ var BookForm = React.createClass({
 var Book = React.createClass({
   render: function() {
     return (
-      <div className="item">
-        <i className="book icon"></i>
+      <div>
+        <div className="title">
+          <i className="dropdown icon"></i>
+          {this.props.title} by {this.props.author}
+        </div>
         <div className="content">
-          <a className="header">{this.props.title}</a>
-          <div className="description">
-            <p>by {this.props.author}</p>
-            <p>{this.props.description}</p>
-          </div>
+          <p className="transition hidden">
+            Generic description!
+          </p>
         </div>
       </div>
     );
