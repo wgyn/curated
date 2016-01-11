@@ -138,6 +138,6 @@ var Book = React.createClass({
 });
 
 ReactDOM.render(
-  <ReadingListContainer url="/lists/565d17c5ddc725331c45d996/books" />,
+  <ReadingListContainer url="/lists/5691a1199cfe371cfa000000" />,
   document.getElementById('reading-list')
 );
