@@ -41,10 +41,9 @@ var ReadingListContainer = React.createClass({
   // @override
   render: function() {
     return (
-      <div className="bob">
-        // TODO: Figure out why this is stuck under the menu
+      <div>
+        // TODO: Figure out why this is stuck under the menu w/out br
         <br/><br/>
-        <h1>Novels About Religion</h1>
         <ReadingList data={this.state.data} />
         <BookForm onAddBook={this.handleAddBook} />
       </div>
@@ -54,20 +53,25 @@ var ReadingListContainer = React.createClass({
 
 var ReadingList = React.createClass({
   render: function() {
-    var books = this.props.data.map(function(book) {
-      return(
-        <Book title={book.title}
-              author={book.author}
-              key={book._id.$oid}>
-          {book.description}
-        </Book>
-      );
-    });
+    var readinglist = this.props.data;
+    // In initial render, readinglist will be an empty array
+    var books = readinglist.books || [];
     return(
-      <div className="ui list">
-        {books}
+      // TODO: Include the list ID somewhere?
+      <div>
+        <h1>{readinglist.name}</h1>
+        <div className="ui list">
+          {books.map(function(book){
+            return(
+              <Book title={book.title}
+                    author={book.author}
+                    key={book._id.$oid}>
+              </Book>
+            )
+          })}
+        </div>
       </div>
-    );
+    )
   }
 });
 
