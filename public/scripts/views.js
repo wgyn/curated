@@ -28,6 +28,21 @@ var ReadingListContainer = React.createClass({
     });
   },
 
+  handleRemoveBook: function(book) {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      type: 'DELETE',
+      data: book,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this),
+    });
+  },
+
   // @override
   getInitialState: function() {
     return {data: []};
@@ -47,7 +62,8 @@ var ReadingListContainer = React.createClass({
       <div>
         // TODO: Figure out why this is stuck under the menu w/out br
         <br/><br/>
-        <ReadingList data={this.state.data} />
+        <ReadingList data={this.state.data}
+                     onRemoveBook={this.handleRemoveBook} />
         <br/>
         <BookForm onAddBook={this.handleAddBook} />
       </div>
@@ -69,10 +85,12 @@ var ReadingList = React.createClass({
             return(
               <Book title={book.title}
                     author={book.author}
-                    key={book._id.$oid}>
+                    bookId={book._id.$oid}
+                    key={book._id.$oid}
+                    onRemoveBook={this.props.onRemoveBook}>
               </Book>
             )
-          })}
+          }.bind(this))}
         </div>
       </div>
     )
@@ -129,6 +147,14 @@ var BookForm = React.createClass({
 });
 
 var Book = React.createClass({
+  handleDelete: function(e) {
+    e.preventDefault();
+    this.props.onRemoveBook({
+      book_id: this.props.bookId,
+    });
+  },
+
+  // @override
   render: function() {
     return (
       <div>
@@ -137,9 +163,12 @@ var Book = React.createClass({
           {this.props.title} by {this.props.author}
         </div>
         <div className="content">
-          <p className="transition hidden">
-            Generic description!
-          </p>
+          <div className="transition hidden">
+            <p>Generic description!</p>
+            <button className="ui button">
+              <i className="trash icon" onClick={this.handleDelete}></i>
+            </button>
+          </div>
         </div>
       </div>
     );

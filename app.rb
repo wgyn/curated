@@ -61,11 +61,15 @@ list_handler = lambda do
       )
       rl.books.push(book)
     when 'DELETE'
-      # TODO: Include book-id in the div...
-      # TODO: Actually call this endpoint
-      1
+      # TODO: Stop deleting the book entirely, maybe just use #nullify
+      book = Model::Book.find(params[:book_id])
+      rl.books.delete(book)
     end
-    rl.as_json(methods: [:books]).to_json
+
+    val = rl.as_json(methods: [:books]).to_json
+    # TODO: Get a real logger
+    puts "#{val}"
+    val
   else
     # TODO: Raise 404 or something...
     JSON.generate({})
