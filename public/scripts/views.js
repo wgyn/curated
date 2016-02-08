@@ -66,6 +66,7 @@ var ReadingListContainer = React.createClass({
                      onRemoveBook={this.handleRemoveBook} />
         <br/>
         <BookForm onAddBook={this.handleAddBook} />
+        <SearchBookForm />
       </div>
     );
   },
@@ -174,6 +175,70 @@ var Book = React.createClass({
     );
   }
 });
+
+var SearchBookForm = React.createClass({
+  // @override
+  componentDidMount: function() {
+    $('.ui.search').search({
+      apiSettings: {
+        url: '/search/?q={query}',
+        searchDelay: 1000,
+        /*
+         * Make sure sure data is in the form expected by the search form
+         * (handled by semantic-ui). See:
+         * http://semantic-ui.com/modules/search.html#/examples.
+         *
+         * {
+         *   "results": [
+         *     {
+         *       "title": "Green Eggs & Ham",
+         *       "author": "Dr. Seuss",
+         *     },
+         *     ...
+         *   ],
+         * },
+         */
+        onResponse: function(backendResponse) {
+          var response = {
+            results: []
+          };
+          $.each(backendResponse, function(idx, item) {
+            response.results.push({
+              // These are magic keys used by semantic-ui
+              title: item.book_title,
+              description: item.author_name,
+            });
+          });
+          return response;
+        },
+        onChange: function(response) {
+          this.setState({response});
+        },
+      },
+      maxResults: 5,
+      minCharacters: 3,
+    });
+  },
+
+  // @override
+  componentDidUpdate: function() {
+    $('.ui.search').dropdown('refresh')
+  },
+
+  // @override
+  render: function() {
+    return (
+      <div className="ui fluid search">
+        <div className="ui icon input fluid">
+          <input className="prompt" type="text"
+                 placeholder="Search by title and/or author..." />
+          <i className="search icon"></i>
+        </div>
+        <div className="results"></div>
+      </div>
+    );
+  },
+})
 
 ReactDOM.render(
   <ReadingListContainer url="/lists/5691a1199cfe371cfa000000" />,

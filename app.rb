@@ -2,7 +2,11 @@ require 'json'
 require 'mongoid'
 require 'sinatra'
 
+require_relative 'goodreads'
+
 require 'sinatra/reloader' if development?
+
+set :keys, YAML.load(File.open(File.join(File.dirname(__FILE__), 'keys.yaml')))
 
 configure do
   Mongoid.load!('mongoid.yaml')
@@ -78,3 +82,10 @@ end
 get '/lists/:list', &list_handler
 post '/lists/:list', &list_handler
 delete '/lists/:list', &list_handler
+
+## Helpers
+get '/search/?' do
+  @@goodreads_client ||= Goodreads::Client.new(settings.keys['goodreads'])
+  works = @@goodreads_client.search_books(params[:q])
+  works.map(&:as_json).to_json
+end
