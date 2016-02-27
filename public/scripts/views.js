@@ -65,8 +65,7 @@ var ReadingListContainer = React.createClass({
         <ReadingList data={this.state.data}
                      onRemoveBook={this.handleRemoveBook} />
         <br/>
-        <BookForm onAddBook={this.handleAddBook} />
-        <SearchBookForm />
+        <SearchBookForm onAddBook={this.handleAddBook} />
       </div>
     );
   },
@@ -96,55 +95,6 @@ var ReadingList = React.createClass({
       </div>
     )
   }
-});
-
-var BookForm = React.createClass({
-  handleTitleChange: function(e) {
-    this.setState({title: e.target.value});
-  },
-
-  handleAuthorChange: function(e) {
-    this.setState({author: e.target.value});
-  },
-
-  handleSubmit: function(e) {
-    e.preventDefault();
-    var title = this.state.title.trim();
-    var author = this.state.author.trim();
-    if (!title) {
-      // TODO: Alert
-      return;
-    }
-    this.props.onAddBook({title: title, author: author});
-    this.setState({title: '', author: ''});
-  },
-
-  // @override
-  getInitialState: function() {
-    return {title: '', author: ''}
-  },
-
-  // @override
-  render: function() {
-    return (
-      <form className="ui form" onSubmit={this.handleSubmit}>
-        <h3 className="ui dividing header">Add a book</h3>
-        <div className="field">
-          <label>Title</label>
-          <input type="text" placeholder="Green Eggs and Ham"
-                 value={this.state.title}
-                 onChange={this.handleTitleChange} />
-        </div>
-        <div className="field">
-          <label>Author</label>
-          <input type="text" placeholder="Dr. Seuss"
-                 value={this.state.author}
-                 onChange={this.handleAuthorChange} />
-        </div>
-        <button className="ui button" type="submit">Add</button>
-      </form>
-    );
-  },
 });
 
 var Book = React.createClass({
@@ -182,7 +132,7 @@ var SearchBookForm = React.createClass({
     $('.ui.search').search({
       apiSettings: {
         url: '/search/?q={query}',
-        searchDelay: 1000,
+        searchDelay: 8000,
         /*
          * Make sure sure data is in the form expected by the search form
          * (handled by semantic-ui). See:
@@ -207,6 +157,8 @@ var SearchBookForm = React.createClass({
               // These are magic keys used by semantic-ui
               title: item.book_title,
               description: item.author_name,
+              // These are used to make internal requests
+              author: item.author_name,
             });
           });
           return response;
@@ -215,6 +167,13 @@ var SearchBookForm = React.createClass({
           this.setState({response});
         },
       },
+      onSelect: function(result, response) {
+        // TODO: Set the Goodreads ID so we can link to these later
+        this.props.onAddBook({
+          title: result.title,
+          author: result.author,
+        });
+      }.bind(this),
       maxResults: 5,
       minCharacters: 3,
     });
@@ -227,11 +186,12 @@ var SearchBookForm = React.createClass({
 
   // @override
   render: function() {
+    $('.ui.search').search('set value', '')
     return (
       <div className="ui fluid search">
         <div className="ui icon input fluid">
           <input className="prompt" type="text"
-                 placeholder="Search by title and/or author..." />
+                 placeholder="To add a book, search by title and/or author..." />
           <i className="search icon"></i>
         </div>
         <div className="results"></div>
