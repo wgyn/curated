@@ -51,9 +51,6 @@ var ReadingListContainer = React.createClass({
   // TODO: Set pollInterval on this
   componentDidMount: function() {
     this.loadData()
-
-    // Initialize accordion for the list
-    $('.ui.accordion').accordion()
   },
 
   // @override
@@ -80,7 +77,7 @@ var ReadingList = React.createClass({
       // TODO: Include the list ID somewhere?
       <div>
         <h1>{readinglist.name}</h1>
-        <div className="ui accordion">
+        <div>
           {books.map(function(book){
             return(
               <Book title={book.title}
@@ -106,19 +103,23 @@ var Book = React.createClass({
   },
 
   // @override
+  // TODO: Title/author would be nice as links. Maybe hoverable?!
   render: function() {
     return (
-      <div>
-        <div className="title">
-          <i className="dropdown icon"></i>
-          {this.props.title} by {this.props.author}
-        </div>
+      <div className="ui fluid card">
         <div className="content">
-          <div className="transition hidden">
-            <p>Generic description!</p>
-            <button className="ui button">
-              <i className="trash icon" onClick={this.handleDelete}></i>
-            </button>
+          <div className="header">
+            {this.props.title}
+          </div>
+          <div className="meta">
+            {this.props.author}
+          </div>
+          <div className="description">
+            <div className="right floated ui basic red button"
+                 onClick={this.handleDelete}>
+              <span><i className="trash icon"></i></span>
+            </div>
+            Generic description!
           </div>
         </div>
       </div>
