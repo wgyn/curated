@@ -1,6 +1,7 @@
 require 'json'
 require 'mongoid'
 require 'sinatra'
+require 'sinatra/cross_origin'
 
 require_relative 'goodreads'
 
@@ -10,6 +11,9 @@ set :keys, YAML.load(File.open(File.join(File.dirname(__FILE__), 'keys.yaml')))
 
 configure do
   Mongoid.load!('mongoid.yaml')
+
+  # TODO: Only allow requests from frontend
+  enable :cross_origin
 end
 
 module Model
@@ -30,10 +34,6 @@ module Model
     field :description, type: String
     has_and_belongs_to_many :books, inverse_of: nil
   end
-end
-
-get '/' do
-  erb :index, :format => :html5
 end
 
 post '/lists' do

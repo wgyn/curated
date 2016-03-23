@@ -44,10 +44,12 @@
   "devDependencies": {
     "bower": "^1.6.8",
     "jsx-loader": "^0.13.2",
-    "webpack": "^1.12.14"
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "start": "webpack-dev-server --inline --content-base ."
   },
   "repository": {
     "type": "git",
