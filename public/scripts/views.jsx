@@ -1,3 +1,6 @@
+var React = require('react')
+var ReactDOM = require('react-dom')
+
 var ReadingListContainer = React.createClass({
   loadData: function() {
     $.ajax({

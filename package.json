@@ -42,7 +42,9 @@
     "yamljs": "^0.2.4"
   },
   "devDependencies": {
-    "bower": "^1.6.8"
+    "bower": "^1.6.8",
+    "jsx-loader": "^0.13.2",
+    "webpack": "^1.12.14"
   },
   "scripts": {
     "test": "grunt test"
