@@ -3,9 +3,9 @@ var ReactDOM = require('react-dom')
 var {Link, Route, Router, browserHistory} = require('react-router')
 var $ = require('jquery')
 
-var ListOfLists = require('./list_of_lists.jsx')
-var Navbar = require('./navbar.jsx')
-var ReadingListContainer = require('./views.jsx')
+var ListOfLists = require('./ListOfLists.jsx')
+var Navbar = require('./Navbar.jsx')
+var ReadingListContainer = require('./ReadingListContainer.jsx')
 
 var App = React.createClass({
   render: function() {
