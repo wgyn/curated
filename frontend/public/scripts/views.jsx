@@ -2,10 +2,9 @@ var React = require('react')
 var ReactDOM = require('react-dom')
 
 var ReadingListContainer = React.createClass({
-  // TODO: This is temporary
+  // TODO: Stick this in a mixin
   url: function() {
-    var readingListId = this.props.params.id || '5691a1199cfe371cfa000000';
-    return 'http://localhost:4567/lists/' + readingListId;
+    return 'http://localhost:4567/lists/' + this.props.params.id;
   },
 
   loadData: function() {
@@ -66,8 +65,6 @@ var ReadingListContainer = React.createClass({
   render: function() {
     return (
       <div>
-        // TODO: Figure out why this is stuck under the menu w/out br
-        <br/><br/>
         <ReadingList data={this.state.data}
                      onRemoveBook={this.handleRemoveBook} />
         <br/>

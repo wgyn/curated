@@ -45,8 +45,7 @@ end
 
 get '/lists' do
   rls = Model::ReadingList.all
-  # TODO: Wrap in HTML
-  rls.map{|rl| [rl.name, rl.description]}
+  rls.to_json(except: [:book_ids, :created_at, :updated_at])
 end
 
 list_handler = lambda do
