@@ -1,21 +1,29 @@
+var React = require('react')
+var ReactDOM = require('react-dom')
+
 var ReadingListContainer = React.createClass({
+  // TODO: Stick this in a mixin
+  url: function() {
+    return 'http://localhost:4567/lists/' + this.props.params.id;
+  },
+
   loadData: function() {
     $.ajax({
-      url: this.props.url,
+      url: this.url(),
       dataType: 'json',
       cache: false,
       success: function(data) {
         this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(this.url(), status, err.toString());
       }.bind(this),
     });
   },
 
   handleAddBook: function(book) {
     $.ajax({
-      url: this.props.url,
+      url: this.url(),
       dataType: 'json',
       type: 'POST',
       data: book,
@@ -23,14 +31,14 @@ var ReadingListContainer = React.createClass({
         this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(this.url(), status, err.toString());
       }.bind(this),
     });
   },
 
   handleRemoveBook: function(book) {
     $.ajax({
-      url: this.props.url,
+      url: this.url(),
       dataType: 'json',
       type: 'DELETE',
       data: book,
@@ -38,7 +46,7 @@ var ReadingListContainer = React.createClass({
         this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(this.url(), status, err.toString());
       }.bind(this),
     });
   },
@@ -57,8 +65,6 @@ var ReadingListContainer = React.createClass({
   render: function() {
     return (
       <div>
-        // TODO: Figure out why this is stuck under the menu w/out br
-        <br/><br/>
         <ReadingList data={this.state.data}
                      onRemoveBook={this.handleRemoveBook} />
         <br/>
@@ -201,7 +207,4 @@ var SearchBookForm = React.createClass({
   },
 })
 
-ReactDOM.render(
-  <ReadingListContainer url="/lists/5691a1199cfe371cfa000000" />,
-  document.getElementById('reading-list')
-);
+module.exports = ReadingListContainer;
