@@ -4,10 +4,8 @@ var ReactDOM = require('react-dom')
 var ReadingListContainer = React.createClass({
   // TODO: This is temporary
   url: function() {
-    return (
-      this.props.params.url ||
-        'http://localhost:4567/lists/5691a1199cfe371cfa000000'
-    );
+    var readingListId = this.props.params.id || '5691a1199cfe371cfa000000';
+    return 'http://localhost:4567/lists/' + readingListId;
   },
 
   loadData: function() {
