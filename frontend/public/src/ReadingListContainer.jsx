@@ -1,10 +1,13 @@
 var React = require('react')
 var ReactDOM = require('react-dom')
 
+var BackendMixin = require('./mixins/BackendMixin.jsx')
+
 var ReadingListContainer = React.createClass({
-  // TODO: Stick this in a mixin
+  mixins: [BackendMixin],
+
   url: function() {
-    return 'http://localhost:4567/lists/' + this.props.params.id;
+    return [this.baseURL(), 'lists', this.props.params.id].join('/');
   },
 
   loadData: function() {
@@ -51,17 +54,14 @@ var ReadingListContainer = React.createClass({
     });
   },
 
-  // @override
   getInitialState: function() {
     return {data: []};
   },
 
-  // TODO: Set pollInterval on this
   componentDidMount: function() {
     this.loadData()
   },
 
-  // @override
   render: function() {
     return (
       <div>
@@ -134,11 +134,18 @@ var Book = React.createClass({
 });
 
 var SearchBookForm = React.createClass({
+  mixins: [BackendMixin],
+
+  url: function() {
+    // The {query} syntax is a semantic UI thing
+    return [this.baseURL(), 'search/?q={query}'].join('/');
+  },
+
   // @override
   componentDidMount: function() {
     $('.ui.search').search({
       apiSettings: {
-        url: '/search/?q={query}',
+        url: this.url(),
         searchDelay: 8000,
         /*
          * Make sure sure data is in the form expected by the search form

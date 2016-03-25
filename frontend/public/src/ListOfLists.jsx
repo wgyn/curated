@@ -1,9 +1,13 @@
 var React = require('react')
 var {Link} = require('react-router')
 
+var BackendMixin = require('./mixins/BackendMixin.jsx')
+
 var ListOfLists = React.createClass({
+  mixins: [BackendMixin],
+
   url: function() {
-    return 'http://localhost:4567/lists'
+    return [this.baseURL(), '/lists'].join('/');
   },
 
   loadData: function() {
